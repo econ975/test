@@ -66,7 +66,7 @@ class mainGUI(QtWidgets.QMainWindow):
     def init_hardware(self):
         try:
             self.hardware = AllHardware()
-            self.hardware.MW_source.init_port(port_num='COM3')
+            self.hardware.MW_source.init_port(port_num='COM4')
         except BaseException as e:
             print(e)
             return
@@ -87,7 +87,7 @@ class mainGUI(QtWidgets.QMainWindow):
                            }
         self.sThread.parameters = self.parameters
         self.x_arr = np.linspace(self.parameters['StartFreq'], self.parameters['StopFreq'],
-                                    self.parameters['NumOfSteps'], endpoint=False)
+                                 self.parameters['NumOfSteps'], endpoint=False)
         self.data = []
         self.sThread.start()
 

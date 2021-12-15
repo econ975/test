@@ -71,13 +71,17 @@ class PulseGenerator():
         pulse_channel = list(pulse_channel)
         for each1 in range(len(pulse_snip) - 1):
             for each2 in pulse_seq:
-                if (each2[0] == 'Ref') and (int(each2[1]) <= pulse_snip[each1]) and (int(each2[2]) >= pulse_snip[each1+1]):
+                if (each2[0] == 'Ref') and (int(each2[1]) <= pulse_snip[each1]) and (
+                        int(each2[2]) >= pulse_snip[each1 + 1]):
                     pulse_channel[0][each1] = 1
-                if (each2[0] == 'Sig') and (int(each2[1]) <= pulse_snip[each1]) and (int(each2[2]) >= pulse_snip[each1+1]):
+                if (each2[0] == 'Sig') and (int(each2[1]) <= pulse_snip[each1]) and (
+                        int(each2[2]) >= pulse_snip[each1 + 1]):
                     pulse_channel[1][each1] = 1
-                if (each2[0] == 'Laser') and (int(each2[1]) <= pulse_snip[each1]) and (int(each2[2]) >= pulse_snip[each1+1]):
+                if (each2[0] == 'Laser') and (int(each2[1]) <= pulse_snip[each1]) and (
+                        int(each2[2]) >= pulse_snip[each1 + 1]):
                     pulse_channel[2][each1] = 1
-                if (each2[0] == 'MicroWave') and (int(each2[1]) <= pulse_snip[each1]) and (int(each2[2]) >= pulse_snip[each1+1]):
+                if (each2[0] == 'MicroWave') and (int(each2[1]) <= pulse_snip[each1]) and (
+                        int(each2[2]) >= pulse_snip[each1 + 1]):
                     pulse_channel[3][each1] = 1
                 if (each2[0] == 'Trigger') and (int(each2[1]) <= pulse_snip[each1]) and (
                         int(each2[2]) >= pulse_snip[each1 + 1]):
@@ -103,21 +107,28 @@ class PulseGenerator():
             name = []
             for each2 in range(len(pulse_seq) - 1):
                 if pulse_seq[(each2 + 1)][each1] == 1:
-                    name.append('ch' + str(each2+0))
+                    name.append('ch' + str(each2 + 0))
             sequence_temp.append((name, pulse_seq[0][each1]))
         sequence_temp.append((['ch8'], 10))
         return sequence_temp
 
+    def mw_on(self):
+        self.pulser.setDefaultPattern(['ch6'])
+        time.sleep(0.01)
+
+    def mw_off(self):
+        self.pulser.setDefaultPattern([])
+        time.sleep(0.01)
+
 
 if __name__ == '__main__':
     hardware = PulseGenerator()
-    test_seq = hardware.write_seq([[100, 2000, 1000,  2500], [0.0, 1, 0.0, 1]])
+    test_seq = hardware.write_seq([[100, 2000, 1000, 2500], [0.0, 1, 0.0, 1]])
     print(test_seq)
     hardware.pulser.download(test_seq, loop=False, dump=False)
     hardware.start_output()
     time.sleep(30)
     hardware.stop_output()
-
 
     # test_seq.extend([[0.0, 1, 0.0, 0, 0, 0.0]] * 24)
     # hardware = PulseGenerator()
@@ -139,4 +150,3 @@ if __name__ == '__main__':
     # output.close()
     # x = counter.get_counts()
     # print(x)
-
