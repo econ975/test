@@ -112,11 +112,11 @@ class PulseGenerator():
         sequence_temp.append((['ch8'], 10))
         return sequence_temp
 
-    def mw_on(self):
-        self.pulser.setDefaultPattern(['ch6'])
+    def mw_aom_on(self):
+        self.pulser.setDefaultPattern(['ch4', 'ch6'])
         time.sleep(0.01)
 
-    def mw_off(self):
+    def mw_aom_off(self):
         self.pulser.setDefaultPattern([])
         time.sleep(0.01)
 

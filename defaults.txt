@@ -1,6 +1,6 @@
-StartFreq=2.8
+StartFreq=2.79
 StopFreq=2.95
-NumOfSteps=300
-DwellTime=20
+NumOfSteps=160
+DwellTime=100
 NumOfAvgs=20
-Power=3
+Power=-5

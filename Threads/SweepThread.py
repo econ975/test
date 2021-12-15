@@ -36,7 +36,7 @@ class SweepThread(QtCore.QThread):
         self._hardware.MW_source.set_power(power=self.power)
         self._hardware.MW_source.switch(state=True)
         self._hardware.trigger_counter.count_freq = int(1000 / self.dwell_time)
-        self._hardware.pulser.mw_on()
+        self._hardware.pulser.mw_aom_on()
 
         self.freq_points = np.linspace(self.start_freq, self.stop_freq, self.num_of_step, endpoint=False)
         for loop in range(self.num_of_ave):
@@ -53,7 +53,7 @@ class SweepThread(QtCore.QThread):
                     print(e)
                     self._hardware.MW_source.switch(state=False)
                     self._hardware.trigger_counter.close_task()
-                    self._hardware.pulser.mw_off()
+                    self._hardware.pulser.mw_aom_off()
                     self.running = False
                     return
             self.update.emit(data_loop)
