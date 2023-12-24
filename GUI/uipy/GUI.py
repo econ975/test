@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         self.photo = QtWidgets.QLabel(self.centralwidget)
         self.photo.setGeometry(QtCore.QRect(QtCore.QRect(0, 0, 70, 70)))
         self.photo.setText("")
-        self.photo.setPixmap(QtGui.QPixmap("C:\\Users\\eee\\Downloads\\Qlogo-White.png"))
+        self.photo.setPixmap(QtGui.QPixmap("Qlogo-White.png"))
         self.photo.setScaledContents(True)
         self.photo.setObjectName("photo")
 
