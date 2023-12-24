@@ -1,5 +1,8 @@
 from PyQt5 import QtCore
 import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+import cv2
 import sys, numpy
 
 
@@ -26,6 +29,8 @@ class SweepThread(QtCore.QThread):
                            }
 
     def run(self):
+        plt.ion()
+        fig1 = plt.figure('frame')
         self.running = True
 
         self.start_freq = float(self.parameters['StartFreq']) * 1000.0
@@ -74,13 +79,32 @@ class SweepThread(QtCore.QThread):
                         if frame is not None:
                             # print("frame #{} received!".format(frame.frame_count))
                             # frame.image_buffer  # .../ perform operations using the data from image_buffer
+
                             image_buffer_copy = np.copy(frame.image_buffer)
-                            # print(image_buffer_copy)
+
+                            img = (image_buffer_copy / 1022) * 255
+                            img = img.astype(np.uint8)
+                            print(img)
+
+                            img = Image.fromarray(img)
+                            img = img.convert('L')
+                            img.save("new.png")
+
+                            plt.imshow(img, cmap='gray')
+                            plt.pause(0.1)
+                            fig1.clf()
+
+                            # plt.imshow(gray_image, cmap='gray')
+                            # plt.show()
+
+
                             actual_roi = image_buffer_copy    # [10:25, 7:22]
                             a = int(np.sum(actual_roi))  # mean/sum pixel value of the ROI in 1 frame
                             sum_roi += a
 
                     mean_roi = sum_roi // NUM_FRAMES
+
+
                     # print("Average intensity in {} frames = {}".format(NUM_FRAMES, mean_roi))
 
                     data_loop.append(mean_roi)

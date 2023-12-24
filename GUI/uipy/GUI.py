@@ -18,12 +18,23 @@ class Ui_MainWindow(object):
         self.widget.setGeometry(QtCore.QRect(10, 10, 781, 231))
         self.widget.setObjectName("widget")
 
-        self.photo = QtWidgets.QLabel(self.centralwidget)
-        self.photo.setGeometry(QtCore.QRect(QtCore.QRect(0, 0, 70, 70)))
-        self.photo.setText("")
-        self.photo.setPixmap(QtGui.QPixmap("Qlogo-White.png"))
-        self.photo.setScaledContents(True)
-        self.photo.setObjectName("photo")
+        self.logo = QtWidgets.QLabel(self.centralwidget)
+        self.logo.setGeometry(QtCore.QRect(QtCore.QRect(730, 0, 70, 70)))
+        self.logo.setText("")
+        # self.photo.setPixmap(QtGui.QPixmap("Qlogo-White.png"))
+        self.logo.setPixmap(QtGui.QPixmap("Qlogo-White.png"))
+        self.logo.setScaledContents(True)
+        self.logo.setObjectName("logo")
+
+        # self.camera_img = QtWidgets.QLabel(self.centralwidget)
+        # self.camera_img.setGeometry(QtCore.QRect(QtCore.QRect(730, 70, 70, 70)))
+        # self.camera_img.setText("")
+        # # self.photo.setPixmap(QtGui.QPixmap("Qlogo-White.png"))
+        # self.camera_img.setPixmap(QtGui.QPixmap("new.png"))
+        # self.camera_img.setScaledContents(True)
+        # self.camera_img.setObjectName("camera_img")
+
+
 
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setGeometry(QtCore.QRect(10, 260, 271, 211))
