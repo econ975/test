@@ -24,7 +24,7 @@ class SynthUSB3():
         """
         self.mw_source = serial.Serial(baudrate=115200, timeout=0.1)
 
-    def init_port(self, port_num='COM4', baudrate_setting=115200, timeout_setting=0.1):
+    def init_port(self, port_num='COM7', baudrate_setting=115200, timeout_setting=0.1):
         """
         Init and open the microwave source with the setting
         :param port_num: The COM port number of the SynthUSB3

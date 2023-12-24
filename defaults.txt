@@ -1,6 +1,8 @@
-StartFreq=2.79
-StopFreq=2.95
-NumOfSteps=160
-DwellTime=100
-NumOfAvgs=20
-Power=-5
+StartFreq=2.84
+StopFreq=2.9
+NumOfSteps=120
+DwellTime=7
+NumOfAvgs=0
+Power=8
+x_roi=705
+y_roi=596

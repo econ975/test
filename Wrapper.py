@@ -2,7 +2,7 @@ import sys
 import numpy as np
 import os.path
 from GUI.uipy.GUI import Ui_MainWindow
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from Hardware import AllHardware
@@ -21,12 +21,17 @@ class mainGUI(QtWidgets.QMainWindow):
         self.ui.mplMap.setGeometry(QtCore.QRect(QtCore.QPoint(0, 0), self.ui.widget.size()))
         self.ui.mplMap.axes = fig.add_subplot(111)
 
+
+
         self.load_defaults()
         self.init_hardware()
 
         self.ui.pushButtonStart.clicked.connect(self.start)
         self.ui.pushButtonStop.clicked.connect(self.stop)
         self.ui.pushButtonSave.clicked.connect(self.save)
+
+
+
 
     def load_defaults(self, fName='defaults.txt'):
         if fName == 'defaults.txt':
@@ -45,7 +50,9 @@ class mainGUI(QtWidgets.QMainWindow):
                'NumOfSteps': self.ui.stepsLineEdit,
                'DwellTime': self.ui.dwellTimeLineEdit,
                'NumOfAvgs': self.ui.numOfAvgsLineEdit,
-               'Power': self.ui.powerLineEdit
+               'Power': self.ui.powerLineEdit,
+               'x_roi': self.ui.x_roiLineEdit,
+               'y_roi': self.ui.y_roiLineEdit
                }
         for key, value in d.items():
             dic.get(key).setText(value)
@@ -58,6 +65,8 @@ class mainGUI(QtWidgets.QMainWindow):
         pairList.append(('DwellTime', self.ui.dwellTimeLineEdit.text()))
         pairList.append(('NumOfAvgs', self.ui.numOfAvgsLineEdit.text()))
         pairList.append(('Power', self.ui.powerLineEdit.text()))
+        pairList.append(('x_roi', self.ui.x_roiLineEdit.text()))
+        pairList.append(('y_roi', self.ui.y_roiLineEdit.text()))
         ofile = open(os.path.join(os.path.dirname(__file__), fName), 'w')
         for pair in pairList:
             ofile.write(pair[0] + "=" + pair[1] + "\n")
@@ -66,7 +75,8 @@ class mainGUI(QtWidgets.QMainWindow):
     def init_hardware(self):
         try:
             self.hardware = AllHardware()
-            self.hardware.MW_source.init_port(port_num='COM4')
+            self.hardware.MW_source.init_port(port_num='COM7')
+            # self.hardware.camera = self.hardware.sdk.open_camera(self.hardware.cameras[0])
         except BaseException as e:
             print(e)
             return
@@ -76,14 +86,19 @@ class mainGUI(QtWidgets.QMainWindow):
 
     @QtCore.pyqtSlot()
     def start(self):
+        self.hardware.camera = self.hardware.sdk.open_camera(self.hardware.cameras[0])
+        print(self.hardware.camera.roi)
+        # test ROI(upper_left_x_pixels=680, upper_left_y_pixels=540, lower_right_x_pixels=783, lower_right_y_pixels=643)
         self.ui.pushButtonStart.setEnabled(False)
         self.ui.pushButtonStop.setEnabled(True)
         self.parameters = {'StartFreq': eval(self.ui.startFreqLineEdit.text()),
                            'StopFreq': eval(self.ui.stopFreqLineEdit.text()),
                            'NumOfSteps': eval(self.ui.stepsLineEdit.text()),
                            'DwellTime': eval(self.ui.dwellTimeLineEdit.text()),
-                           'NumOfAvgs': eval(self.ui.numOfAvgsLineEdit.text()),
-                           'Power': eval(self.ui.powerLineEdit.text())
+                           'Gains': eval(self.ui.numOfAvgsLineEdit.text()),
+                           'Power': eval(self.ui.powerLineEdit.text()),
+                           'x_roi': eval(self.ui.x_roiLineEdit.text()),
+                           'y_roi': eval(self.ui.y_roiLineEdit.text())
                            }
         self.sThread.parameters = self.parameters
         self.x_arr = np.linspace(self.parameters['StartFreq'], self.parameters['StopFreq'],
@@ -133,7 +148,8 @@ class mainGUI(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot(list)
     def update_plot(self, l):
         self.data.append(l)
-        avg = np.mean(self.data, axis=0)
+        # avg = np.mean(self.data, axis=0)
+        avg = np.array(l)
         try:
             del self.errorPlot
             self.ui.mplMap.figure.clear()
@@ -142,8 +158,10 @@ class mainGUI(QtWidgets.QMainWindow):
             pass
         try:
             self.linePlot.set_ydata(avg)
+            self.ui.mplMap.axes.set_ylim(np.min(avg) * 0.99, np.max(avg) * 1.01)
         except AttributeError:
             self.linePlot, = self.ui.mplMap.axes.plot(self.x_arr, avg)
+            self.ui.mplMap.axes.set_ylim(np.min(avg)*0.99,np.max(avg)*1.1)
         finally:
             self.ui.mplMap.draw()
 
