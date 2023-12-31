@@ -22,7 +22,6 @@ class mainGUI(QtWidgets.QMainWindow):
         self.ui.mplMap.axes = fig.add_subplot(111)
 
 
-
         self.load_defaults()
         self.init_hardware()
 
