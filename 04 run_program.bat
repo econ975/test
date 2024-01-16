@@ -1,3 +1,3 @@
 CHCP 65001
-.\env\python.exe seg5.py
+.\env\python.exe \temp\Wrapper.py
 pause
